@@ -1,33 +1,11 @@
-import { useState } from "react";
 import Employees from "../employees.json";
+import "../App.css";
+import ListItem from "./ListItem";
 
-const List = () => {
-  const [checkedState, setCheckedState] = useState(
-    new Array(Employees.length).fill(false)
-  );
-  const [totalSelected, setTotalSelected] = useState([]);
-
-  const handleChange = (position) => {
-    const updatedCheckedState = checkedState.map((isChecked, i) =>
-      i === position ? !isChecked : isChecked
-    );
-
-    setCheckedState(updatedCheckedState);
-
-    const selected = updatedCheckedState.reduce(
-      (selectedList, currentState, index) => {
-        if (currentState === true) {
-          selectedList.push(index);
-        }
-        return selectedList;
-      },
-      []
-    );
-
-    setTotalSelected(selected);
-  };
+const List = ({ totalSelected, handleChange, checkedState }) => {
+   
   return (
-    <div>
+    <div className="App">
       <h2>Employees</h2>
       <h3>
         Selected:{" "}
@@ -35,7 +13,7 @@ const List = () => {
           <span key={i}>{i + 1}, </span>
         ))}{" "}
       </h3>
-      <table border="3">
+      <table className="table" border="2">
         <tbody>
           <tr>
             <th></th>
@@ -46,21 +24,7 @@ const List = () => {
           </tr>
 
           {Employees.map((employee, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  type="checkbox"
-                  value={index}
-                  name={index}
-                  onChange={() => handleChange(index)}
-                  checked={checkedState[index]}
-                ></input>
-              </td>
-              <td>{index + 1}</td>
-              <td>{employee.name}</td>
-              <td>{employee.address}</td>
-              <td>{employee.company}</td>
-            </tr>
+            <ListItem key={index} employee={employee} index={index} handleChange={handleChange} checkedState={checkedState}/>
           ))}
         </tbody>
       </table>
